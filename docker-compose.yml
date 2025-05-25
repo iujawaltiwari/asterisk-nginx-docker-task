@@ -1,0 +1,33 @@
+version: '3.8'
+
+services:
+  asterisk:
+    build: ./asterisk
+    container_name: asterisk
+    ports:
+      - "5060:5060/udp"
+      - "5060:5060/tcp"
+      - "10000-10100:10000-10100/udp"
+      - "5038:5038"
+    volumes:
+      - asterisk_data:/var/lib/asterisk
+    networks:
+      - internal
+    restart: unless-stopped
+
+  nginx:
+    build: ./nginx
+    container_name: nginx-dashboard
+    ports:
+      - "8080:80"
+    networks:
+      - internal
+    restart: unless-stopped
+
+volumes:
+  asterisk_data:
+
+networks:
+  internal:
+    driver: bridge
+
